@@ -37,6 +37,16 @@ const mimeTypes = {
   '.webp': 'image/webp',
 };
 
+const blockedPaths = [
+  /(^|[\\/])server\.js$/i,
+  /(^|[\\/])admin\.js$/i,
+  /(^|[\\/])admin\.css$/i,
+  /(^|[\\/])data[\\/]/i,
+  /(^|[\\/])\.env$/i,
+  /(^|[\\/])package\.json$/i,
+  /(^|[\\/])README\.md$/i,
+];
+
 const ensureStorage = () => {
   fs.mkdirSync(dataDirectory, { recursive: true });
   if (!fs.existsSync(messagesFile)) fs.writeFileSync(messagesFile, '[]\n', 'utf8');
@@ -128,9 +138,17 @@ const serveFile = (request, response, pathname) => {
     response.end('Bad request');
     return;
   }
+
   const requestedPath = decodedPath === '/' ? '/index.html' : decodedPath;
   const routedPath = requestedPath === '/admin' || requestedPath === '/admin/' ? '/admin.html' : requestedPath;
   const filePath = path.resolve(rootDirectory, `.${routedPath}`);
+
+  if (blockedPaths.some((pattern) => pattern.test(filePath))) {
+    response.writeHead(403, { 'Content-Type': 'text/plain; charset=utf-8' });
+    response.end('Forbidden');
+    return;
+  }
+
   if (!filePath.startsWith(rootDirectory) || !fs.existsSync(filePath) || fs.statSync(filePath).isDirectory()) {
     response.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
     response.end('Not found');
