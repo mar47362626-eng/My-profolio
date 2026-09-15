@@ -116,10 +116,12 @@ const navigationObserver = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
     if (!entry.isIntersecting) return;
 
+    sections.forEach((section) => section.classList.toggle('is-active', section === entry.target));
     navigationLinks.forEach((link) => {
       link.classList.toggle('is-current', link.getAttribute('href') === `#${entry.target.id}`);
     });
   });
-}, { rootMargin: '-35% 0px -55% 0px' });
+}, { rootMargin: '-25% 0px -45% 0px', threshold: 0.1 });
 
 sections.forEach((section) => navigationObserver.observe(section));
+sections[0]?.classList.add('is-active');
