@@ -1,6 +1,7 @@
 const messageList = document.querySelector('#message-list');
 const messageCount = document.querySelector('#message-count');
 const clearMessages = document.querySelector('#clear-messages');
+const apiBaseUrl = 'https://my-profolio-npbf.onrender.com';
 
 const escapeHtml = (value) => String(value).replace(/[&<>'"]/g, (character) => ({
   '&': '&amp;',
@@ -11,7 +12,7 @@ const escapeHtml = (value) => String(value).replace(/[&<>'"]/g, (character) => (
 }[character]));
 
 const renderMessages = async () => {
-  const response = await fetch('/api/messages');
+  const response = await fetch(`${apiBaseUrl}/api/messages`);
   const messages = await response.json();
   messageCount.textContent = messages.length;
   messageList.innerHTML = messages.length ? messages.map((message) => `
@@ -28,13 +29,13 @@ const renderMessages = async () => {
 messageList.addEventListener('click', async (event) => {
   const button = event.target.closest('[data-message-id]');
   if (!button) return;
-  await fetch(`/api/messages/${encodeURIComponent(button.dataset.messageId)}`, { method: 'DELETE' });
+  await fetch(`${apiBaseUrl}/api/messages/${encodeURIComponent(button.dataset.messageId)}`, { method: 'DELETE' });
   renderMessages();
 });
 
 clearMessages.addEventListener('click', async () => {
   if (window.confirm('Delete all contact messages?')) {
-    await fetch('/api/messages', { method: 'DELETE' });
+    await fetch(`${apiBaseUrl}/api/messages`, { method: 'DELETE' });
     renderMessages();
   }
 });

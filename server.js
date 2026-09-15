@@ -7,6 +7,10 @@ const nodemailer = require('nodemailer');
 
 const port = Number(process.env.PORT) || 3000;
 const rootDirectory = __dirname;
+const allowedOrigins = new Set([
+  'https://mar47362626-eng.github.io',
+  'http://localhost:3000',
+]);
 const dataDirectory = path.join(rootDirectory, 'data');
 const messagesFile = path.join(dataDirectory, 'messages.json');
 const contactEmail = process.env.CONTACT_EMAIL || 'ayomideoluniyi49@gmail.com';
@@ -77,6 +81,13 @@ const sendJson = (response, statusCode, payload) => {
   response.end(JSON.stringify(payload));
 };
 
+const setCorsHeaders = (request, response) => {
+  const origin = request.headers.origin;
+  if (allowedOrigins.has(origin)) response.setHeader('Access-Control-Allow-Origin', origin);
+  response.setHeader('Access-Control-Allow-Methods', 'GET,POST,DELETE,OPTIONS');
+  response.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+};
+
 const readRequestBody = (request) => new Promise((resolve, reject) => {
   let body = '';
   request.on('data', (chunk) => {
@@ -115,6 +126,13 @@ const serveFile = (request, response, pathname) => {
 const server = http.createServer(async (request, response) => {
   const requestUrl = new URL(request.url, `http://${request.headers.host || 'localhost'}`);
   const { pathname } = requestUrl;
+  setCorsHeaders(request, response);
+
+  if (request.method === 'OPTIONS') {
+    response.writeHead(204);
+    response.end();
+    return;
+  }
 
   if (pathname === '/api/messages' && request.method === 'GET') {
     sendJson(response, 200, readMessages());

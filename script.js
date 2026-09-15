@@ -1,6 +1,7 @@
 const graphic = document.querySelector('.signal-graphic');
 const contactForm = document.querySelector('#contact-form');
 const formStatus = document.querySelector('#form-status');
+const apiBaseUrl = 'https://my-profolio-npbf.onrender.com';
 
 const loader = document.querySelector('#site-loader');
 const loaderTime = document.querySelector('#loader-time');
@@ -50,7 +51,7 @@ contactForm?.addEventListener('submit', (event) => {
     formStatus.className = 'form-status is-sending';
     formStatus.textContent = 'Sending message...';
   }
-  fetch('/api/messages', {
+  fetch(`${apiBaseUrl}/api/messages`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(Object.fromEntries(formData.entries())),
