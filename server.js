@@ -14,6 +14,8 @@ const allowedOrigins = new Set([
 const dataDirectory = path.join(rootDirectory, 'data');
 const messagesFile = path.join(dataDirectory, 'messages.json');
 const contactEmail = process.env.CONTACT_EMAIL || 'ayomideoluniyi49@gmail.com';
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const smtpTransport = process.env.BREVO_SMTP_USER && process.env.BREVO_SMTP_KEY
   ? nodemailer.createTransport({
       host: 'smtp-relay.brevo.com',
@@ -73,6 +75,22 @@ const sendContactEmail = async ({ name, email, message }) => {
     html: `<div style="background:#061923;color:#e8f2eb;font-family:Arial,sans-serif;padding:32px;max-width:640px"><p style="color:#35ee82;font:12px monospace;letter-spacing:1px">AAO / NEW CONTACT MESSAGE</p><h1 style="font-size:28px;margin:18px 0">New project enquiry</h1><p style="color:#9bb0a4">Someone contacted you through your portfolio.</p><hr style="border:0;border-top:1px solid #29424a;margin:24px 0"><p><strong style="color:#35ee82">Name</strong><br>${escapeHtml(name)}</p><p><strong style="color:#35ee82">Email</strong><br><a href="mailto:${escapeHtml(email)}" style="color:#35ee82">${escapeHtml(email)}</a></p><p><strong style="color:#35ee82">Message</strong></p><p style="background:#102832;padding:18px;line-height:1.6;white-space:pre-wrap">${escapeHtml(message)}</p><p style="color:#9bb0a4;font-size:12px">Reply directly to this email to contact the sender.</p></div>`,
   });
   console.log(`Brevo accepted message ${result.messageId} for ${contactEmail}`);
+  return true;
+};
+
+const saveMessageToSupabase = async ({ name, email, message }) => {
+  if (!supabaseUrl || !supabaseServiceRoleKey) return false;
+  const response = await fetch(`${supabaseUrl}/rest/v1/messages`, {
+    method: 'POST',
+    headers: {
+      apikey: supabaseServiceRoleKey,
+      Authorization: `Bearer ${supabaseServiceRoleKey}`,
+      'Content-Type': 'application/json',
+      Prefer: 'return=minimal',
+    },
+    body: JSON.stringify({ name, email, message }),
+  });
+  if (!response.ok) throw new Error(`Supabase returned ${response.status}: ${await response.text()}`);
   return true;
 };
 
@@ -151,6 +169,11 @@ const server = http.createServer(async (request, response) => {
       }
       const newMessage = { id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`, name, email, message, createdAt: new Date().toISOString() };
       writeMessages([newMessage, ...readMessages()]);
+      try {
+        await saveMessageToSupabase(newMessage);
+      } catch (supabaseError) {
+        console.error('Supabase save failed:', supabaseError.message);
+      }
       let emailStatus = smtpTransport ? 'failed' : 'not-configured';
       let emailError = '';
       try {
