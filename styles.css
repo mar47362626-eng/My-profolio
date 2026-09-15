@@ -267,3 +267,39 @@ body { background-color: #061923; background-image: linear-gradient(rgba(53, 238
   .email-link { display: inline-block; max-width: 100%; overflow-wrap: anywhere; font-size: 18px; }
   .site-footer { padding-top: 18px; padding-bottom: 18px; font-size: 9px; }
 }
+
+/* Project readability and spacing polish */
+.work-section { position: relative; }
+.work-section::before { content: '03 / 04'; position: absolute; top: 119px; right: clamp(24px, 6vw, 88px); color: rgba(155, 176, 164, .58); font: 9px var(--mono); letter-spacing: .12em; }
+.section-heading { grid-template-columns: .75fr 1.25fr .9fr; max-width: 1180px; }
+.section-heading h2 { max-width: 570px; }
+.project { grid-template-columns: 1.08fr .92fr; min-height: 470px; border-radius: 3px; }
+.project-visual { min-height: 470px; }
+.project-details { padding: 52px clamp(30px, 4vw, 64px); }
+.project-details::before { height: 72px; }
+.project h3 { max-width: 360px; font-size: clamp(28px, 2.6vw, 42px); }
+.project-details > p:not(.project-number) { max-width: 330px; }
+.tech-list { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 8px; }
+.tech-list span { display: inline-flex; align-items: center; min-height: 25px; border: 1px solid rgba(53, 238, 130, .35); border-radius: 999px; padding: 4px 9px; font: 9px var(--mono); letter-spacing: .02em; }
+.project-link { margin-top: auto; padding-top: 27px; }
+.project-visual::after { pointer-events: none; }
+.lumen-panel { box-shadow: 14px 14px 0 rgba(6, 25, 35, .18); }
+.field-card { box-shadow: 16px 16px 0 rgba(6, 25, 35, .2); }
+@media (max-width: 1000px) {
+  .work-section::before { top: 90px; }
+  .project { min-height: 390px; }
+  .project-visual { min-height: 390px; }
+  .project-details { padding: 34px; }
+}
+@media (max-width: 800px) {
+  .work-section::before { display: none; }
+  .project { min-height: 0; }
+  .project-visual { min-height: 350px; }
+  .project-details { padding: 36px 28px 40px; }
+  .project-link { margin-top: 22px; }
+}
+@media (max-width: 650px) {
+  .project-visual { min-height: 285px; }
+  .project-details { padding: 34px 25px 38px; }
+  .project h3 { font-size: 30px; }
+}
