@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex" />
+  <title>AAO Admin — Messages</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+  <main class="admin-shell">
+    <header class="admin-header">
+      <a class="admin-brand" href="index.html"><span>AA</span> Engineer A A Oluniyi</a>
+      <a class="back-link" href="index.html">View public site ↗</a>
+    </header>
+    <section class="admin-intro">
+      <p class="eyebrow">AAO / ADMIN</p>
+      <h1>Contact messages</h1>
+      <p>Messages submitted through the public portfolio are stored in this browser.</p>
+    </section>
+    <section class="admin-toolbar" aria-label="Message controls">
+      <div><strong id="message-count">0</strong><span>total messages</span></div>
+      <button id="clear-messages" type="button">Clear all</button>
+    </section>
+    <section id="message-list" class="message-list" aria-live="polite"></section>
+  </main>
+  <script src="admin.js"></script>
+</body>
+</html>
