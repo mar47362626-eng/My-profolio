@@ -130,6 +130,10 @@ h1 em, h2 em { color: var(--lime); }
 .email-link span { color: var(--lime); }
 .site-footer { color: var(--muted); }
 .site-footer a { color: var(--lime); }
+.whatsapp-float { position: fixed; z-index: 12; right: clamp(18px, 3vw, 42px); bottom: clamp(18px, 3vw, 34px); display: inline-flex; align-items: center; gap: 9px; border: 1px solid #25d366; border-radius: 999px; padding: 11px 15px 11px 12px; background: #25d366; color: #062018; box-shadow: 0 12px 30px rgba(0, 0, 0, .3); font: 700 11px var(--mono); transition: transform .2s ease, background .2s ease, box-shadow .2s ease; }
+.whatsapp-float svg { width: 19px; height: 19px; fill: currentColor; }
+.whatsapp-float:hover { transform: translateY(-3px); background: #55e886; box-shadow: 0 16px 34px rgba(37, 211, 102, .28); }
+.whatsapp-float:focus-visible { outline: 2px solid var(--paper); outline-offset: 3px; }
 @media (max-width: 800px) { .profile-portrait { width: 150px; height: 200px; } .profile-portrait::after { bottom: 29px; width: 100px; height: 70px; } .hero-skills { margin-top: -8px; } }
 
 /* Reference-style profile hero */
@@ -270,6 +274,8 @@ body { background-color: #061923; background-image: linear-gradient(rgba(53, 238
   .contact-section h2 { margin: 54px 0 62px; font-size: clamp(48px, 15vw, 75px); }
   .email-link { display: inline-block; max-width: 100%; overflow-wrap: anywhere; font-size: 18px; }
   .site-footer { padding-top: 18px; padding-bottom: 18px; font-size: 9px; }
+  .whatsapp-float { right: 16px; bottom: 16px; padding: 12px; }
+  .whatsapp-float span { display: none; }
 }
 
 /* Project readability and spacing polish */
